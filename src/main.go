@@ -4,7 +4,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
-	"os"
 )
 
 func main() {
@@ -16,10 +15,6 @@ func main() {
 	e.GET("/api/poroscope", func (ctx echo.Context) error {
 		return ctx.JSON(http.StatusOK, "Hello world")
 	})
-	port := os.Getenv("HTTP_PORT")
-	if port == "" {
-		port = "8080"
-	}
 
-	e.Logger.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start(":8080"))
 }
