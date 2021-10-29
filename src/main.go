@@ -1,19 +1,25 @@
 package main
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
-	"log"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"net/http"
+	"os"
 )
 
-func GetHoroscope(w http.ResponseWriter, r *http.Request)  {
-	json.NewEncoder(w).Encode("hello world")
-}
-
 func main() {
-	router :=  mux.NewRouter()
+	e := echo.New()
 
-	router.HandleFunc("/api/poroscope", GetHoroscope).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.GET("/api/poroscope", func (ctx echo.Context) error {
+		return ctx.JSON(http.StatusOK, "Hello world")
+	})
+	port := os.Getenv("HTTP_PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	e.Logger.Fatal(e.Start(":" + port))
 }
