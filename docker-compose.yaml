@@ -1,0 +1,57 @@
+version: '3.7'
+services:
+
+  poroscope-api:
+    image: poroscope-api:0.1
+    depends_on:
+      - postgres
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - static-network
+
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - postgres
+    command: -url=jdbc:postgresql://postgres/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PWD} -connectRetries=10 migrate
+    volumes:
+      - ./db_scripts:/flyway/sql
+    ports:
+      - 3306:3306
+    networks:
+      - static-network
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PWD}
+    ports:
+      - 5432:5432
+    networks:
+      - static-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "email@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - static-network
+
+networks:
+  static-network:
+    name: poro-network
+
+volumes:
+  pgadmin:
