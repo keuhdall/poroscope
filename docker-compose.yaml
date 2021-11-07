@@ -1,16 +1,6 @@
 version: '3.7'
 services:
 
-  poroscope-api:
-    image: poroscope-api:0.1
-    depends_on:
-      - postgres
-    restart: on-failure
-    ports:
-      - 8080:8080
-    networks:
-      - static-network
-
   flyway:
     image: flyway/flyway
     depends_on:

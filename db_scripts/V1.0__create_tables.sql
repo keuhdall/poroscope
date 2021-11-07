@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE public.horoscope(
-    id UUID NOT NULL,
+CREATE TABLE public.horoscopes(
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     content text NOT NULL
 );
