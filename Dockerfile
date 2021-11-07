@@ -1,16 +1,20 @@
-FROM golang:1.17-alpine
+FROM haskell:8.10.7
 
-WORKDIR /app
+WORKDIR /poroscope-api
 
-COPY go.mod ./
-COPY go.sum ./
+COPY *.md ./
+COPY stack.yaml ./
+COPY package.yaml ./
+COPY app/Main.hs ./app/
+COPY src/*.hs ./src/
+COPY test/*.hs ./test/
 
-RUN go mod download
-
-COPY src/*.go ./
-
-RUN go build -o /poroscope-api
+RUN apt-get update
+RUN apt-get install -y python-dev
+RUN apt-get install -y libpq-dev
+RUN stack build
+RUN stack install
 
 EXPOSE 8080
 
-CMD ["/poroscope-api"]
+CMD ["poroscope-exe"]
