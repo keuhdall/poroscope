@@ -14,6 +14,23 @@ import Data.Aeson
 import Data.Aeson.TH
 import Data.UUID as UUID
 
+data Sign =
+  Aries
+  | Taurus
+  | Gemini
+  | Cancer
+  | Leo
+  | Virgo
+  | Libra
+  | Scorpio
+  | Sagittarius
+  | Capricorn
+  | Aquarius
+  | Pisces
+  deriving Show
+
+data Role = Top | Jungle | Mid | Bot | Support deriving Show
+
 data Horoscope = Horoscope {
   id      :: String,
   content :: String
